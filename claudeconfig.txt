@@ -1,0 +1,11 @@
+{
+    "mcpServers": {
+        "google-calendar": {
+            "command": "node",
+            "args": [
+                "/Users/dristiroy/MULTITOOLBOX/multitoolbox/google-calendar-mcp/build/index.js"
+            ],
+            "env": {}
+        }
+    }
+}
