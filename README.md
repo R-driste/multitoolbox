@@ -81,3 +81,5 @@ yayy the integration worked!
 how about i create two apps, one that does the auth and then one that runs the servers.
 
 gitignore the npm modules
+
+run individual servers based on whether user wants
