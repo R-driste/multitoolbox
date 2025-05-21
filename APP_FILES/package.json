@@ -1,0 +1,15 @@
+{
+    "name": "google-suite-mcp-app",
+    "version": "1.0.0",
+    "description": "A simple desktop app to set up Google Suite MCPs",
+    "main": "main.js",
+    "scripts": {
+        "start": "electron ."
+    },
+    "devDependencies": {
+        "electron": "^25.9.8"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC"
+}

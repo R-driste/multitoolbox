@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Google Suite MCP App</title>
+  <link rel='stylesheet' href='styling.css'>
+</head>
+
+<body>
+  <div class="container">
+    <h1>Google Suite MCP Setup</h1>
+    
+    <div class="input-group">
+      <label for="apiKey">API Key:</label>
+      <input type="text" id="apiKey" placeholder="Enter API Key">
+    </div>
+    
+    <div class="input-group">
+      <label for="userEmail">User Email:</label>
+      <input type="email" id="userEmail" placeholder="Enter User Email">
+    </div>
+    
+    <button class="button" id="setupButton">Setup Google Suite</button>
+    <button class="button" id="clearButton">Clear Setup</button>
+  </div>
+
+  <script>
+    const setupButton = document.getElementById('setupButton');
+    const clearButton = document.getElementById('clearButton');
+
+    setupButton.addEventListener('click', () => {
+      const apiKey = document.getElementById('apiKey').value;
+      const userEmail = document.getElementById('userEmail').value;
+
+      // Here, add the logic to handle Google Suite setup with API Key and User Email
+      console.log('Setting up Google Suite for:', userEmail);
+      console.log('Using API Key:', apiKey);
+
+      // You can call Google API setup functions here using the user's input
+      // Example:
+      // setupGoogleSuite(apiKey, userEmail);
+    });
+
+    clearButton.addEventListener('click', () => {
+      document.getElementById('apiKey').value = '';
+      document.getElementById('userEmail').value = '';
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,7 @@
+node_modules/
+APP_FILES/node_modules/
+mcp-gdrive-main/node_modules/
+mcp-gdrive-main/AUTH/
+google-calendar-mcp/node_modules/
+off_lims/
+google-calendar-mcp/.env

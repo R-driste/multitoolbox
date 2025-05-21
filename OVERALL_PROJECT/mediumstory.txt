@@ -1,0 +1,23 @@
+---
+
+Combining Google Suite MCPs into one easy authentication process
+
+---
+
+0. Intro. Combining Google Suite MCPs into one easy authentication process
+Integrating MCPs (model context protocol) for LLM use with large-scale apps has been one of the biggest new tech innovations since November. In a task to familiarize myself with them, I will be building an app that can pool them together for use with Claude. This text will be broken up into three primary sections: 1. My project link (short) 2. What is MCP, and how can we use it? (for anyone unfamiliar) and 3. What are the steps that it took me to learn about this, build the tool, and my plans for the future?
+1. My project link and brief explanation.
+Here is the GitHub repository for my Google Suite Toolbox and video demonstration:
+video ->
+github ->
+
+This is an app to quickly setup the Google Suite MCPs for use with Claude.
+2. What is MCP and why is it SO important?
+Model context protocol is a project that was released late last year, which enables users to connect popular APIs (generally intended for the backend development of apps) to be used with popular LLMs such as Chat-GPT and Claude. MCP allows the LLM to directly execute tasks for you that collaborate with other important apps. For example, if I wanted to schedule a meeting for 3:30 while talking to Claude, I could prompt Claude to do so, and it would directly schedule the event. If I wanted to purchase a stock at that instant, it would only take a one-sentence command for it to be done. But how can we get it to do this?
+MCP will determine a set of functions available to the LLM, and when you ask the LLM to execute a command using natural language processing, it will decide a set of functions to best complete your task. However, this set of commands needs to be explicitly defined, leading to the importance of widely available MCP servers. MCP servers are explicitly written sets of commands that group API functionalities into common functions for the LLM to be granted access to. A large number of companies have already written MCP servers for their technologies, like Amazon, Brave, and Google.
+3. My project background information.
+For the MCP server to run properly on your local desktop, the setup process generally takes multiple steps to provide proper authentication. It is required that you install and follow the given instructions manually and use your personal keys to finally establish an environment that will run the MCP server and allow the LLM to operate correctly. However, I noticed an opportunity to optimize this process further by grouping the Google Suite MCPs into one cohesive interface and reducing the manual setup process.
+
+---
+
+Thank you for reading my post. I hope you found it interesting or educational. As a computer science student, it was a good learning experience for me. I look forward to building more and seeing tools emerge in this sector - Dristi Roy
