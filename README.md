@@ -83,3 +83,23 @@ how about i create two apps, one that does the auth and then one that runs the s
 gitignore the npm modules
 
 run individual servers based on whether user wants
+
+starting server is being buggy :()'
+
+add logger functionality
+have npx install serverloger there
+then console will not interfere :<
+
+npx not helping much :'D
+
+give up and explain the error message later.
+cd..
+does it even count command line TuT
+ok plugged in!
+
+add screenshots of project steps
+
+4. features
+MCP for maps, search, drive, and calendar
+
+zips folder will hold zipped servers
