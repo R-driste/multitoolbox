@@ -153,7 +153,6 @@ async function initContext(){
     console.error("Failed to initialize context:", error);
     process.exit(1);
   }
-
 }
 
 server.tool("create", "Creates a spreadsheet by taking the new sheet's name as input",

@@ -5,5 +5,6 @@ A connection between multiple google interfaces with LLM
 
 + needs google developer details
 
-This script will assist your Gsuite MCP setup process
-
+This script will assist your Gsuite MCP setup processbun
+maybe needs an api service?
+edit config so that it has the paths then.
