@@ -22,14 +22,12 @@ const SCOPES = [
 
 const CREDENTIALS_CONFIG = process.env.CREDENTIALS_CONFIG;
 
-const TOKEN_PATH = "token.json";
-const CREDENTIALS_PATH = "credentials.json";
+const TOKEN_PATH = "/Users/dristiroy/MULTITOOLBOX/multitoolbox/mcp-google-sheets-main/token.json";
+const CREDENTIALS_PATH = "/Users/dristiroy/MULTITOOLBOX/multitoolbox/mcp-google-sheets-main/credentials.json";
 const SERVICE_ACCOUNT_PATH = "service_account.json";
 const DRIVE_FOLDER_ID = process.env.DRIVE_FOLDER_ID || "";
 
 let context: SpreadsheetContext;
-
-
 
 async function initContext(){
   try {
@@ -62,9 +60,7 @@ async function initContext(){
     
     
     // Priority 3: Use OAuth credentials
-    if (fs.existsSync(CREDENTIALS_PATH)) {
-      console.log("Using OAuth credentials from file");
-      
+    if (fs.existsSync(CREDENTIALS_PATH)) {      
       try {
         const credentialContent = fs.readFileSync(CREDENTIALS_PATH, 'utf-8');
         const credentials = JSON.parse(credentialContent);
@@ -84,7 +80,6 @@ async function initContext(){
         
         // Check if we have a saved token
         if (fs.existsSync(TOKEN_PATH)) {
-          console.log("Using saved token");
           const tokenContent = fs.readFileSync(TOKEN_PATH, 'utf-8');
           oAuth2Client.setCredentials(JSON.parse(tokenContent));
           
@@ -92,7 +87,6 @@ async function initContext(){
           try {
             const drive = google.drive({ version: 'v3', auth: oAuth2Client });
             await drive.files.list({ pageSize: 1 });
-            console.log("OAuth authentication successful with saved token");
             
             context = {
               sheets: google.sheets({ version: 'v4', auth: oAuth2Client }),
@@ -111,6 +105,7 @@ async function initContext(){
           access_type: 'offline', 
           scope: SCOPES 
         });
+        
         console.log('Authorize this app by visiting this URL:', authUrl);
         
         const rl = readline.createInterface({ 
