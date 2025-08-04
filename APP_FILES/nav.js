@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const button = document.getElementById('startButton');
   if (button) {
     button.addEventListener('click', () => {
-      window.location.href = 'first_setup_screen.html';
+      window.location.href = 'first_setup_screen_2.html';
     });
   } else {
     console.error('startButton not found');
@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const button_1 = document.getElementById('firstButton');
   if (button_1) {
     button_1.addEventListener('click', () => {
-      window.location.href = 'scopes.html';
+      window.location.href = 'scopes_3.html';
     });
   } else {
     console.error('firstButton not found');
@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const button_2 = document.getElementById('secondButton');
   if (button_2) {
     button_2.addEventListener('click', () => {
-      window.location.href = 'credentials.html';
+      window.location.href = 'credentials_4.html';
     });
   } else {
     console.error('firstButton not found');
@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
       try {
         const json = JSON.parse(event.target.result);
         console.log("JSON content:", json);
-        window.location.href = "keyscreen.html";
+        window.location.href = "keyscreen_5.html";
       } catch (err) {
         alert("Invalid JSON file, upload proper credentials.");
       }
