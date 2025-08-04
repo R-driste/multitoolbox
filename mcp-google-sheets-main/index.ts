@@ -8,6 +8,7 @@ import readline from "readline";
 import type { SpreadsheetContext } from "./types";
 import { addColumns, addRows, batchUpdate, copySheet, createSheet, createSpreadSheet, listSheets, listSpreadsheets, renameSheet, shareSpreadsheet, sheetData, spreadsheetInfo, updateCells } from './sheets';
 
+console.error("Starting Google Sheets MCP server...");
 
 const server = new McpServer({
   name: "Demo",
@@ -22,9 +23,8 @@ const SCOPES = [
 
 const CREDENTIALS_CONFIG = process.env.CREDENTIALS_CONFIG;
 
-const TOKEN_PATH = "/Users/dristiroy/MULTITOOLBOX/multitoolbox/mcp-google-sheets-main/token.json";
-const CREDENTIALS_PATH = "/Users/dristiroy/MULTITOOLBOX/multitoolbox/mcp-google-sheets-main/credentials.json";
-const SERVICE_ACCOUNT_PATH = "service_account.json";
+const TOKEN_PATH = "token.json";
+const CREDENTIALS_PATH = "credentials.json";
 const DRIVE_FOLDER_ID = process.env.DRIVE_FOLDER_ID || "";
 
 let context: SpreadsheetContext;
@@ -55,12 +55,45 @@ async function initContext(){
         console.error("Error with credentials from environment:", error);
       }
     }
-    
-    // Priority 2: Use service account file
-    
+      
+    if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_REFRESH_TOKEN) {
+      try {
+        console.error("Attempting OAuth with environment variables...");
+        const oAuth2Client = new google.auth.OAuth2(
+          process.env.GOOGLE_CLIENT_ID,
+          process.env.GOOGLE_CLIENT_SECRET,
+          process.env.GOOGLE_REDIRECT_URI
+        );
+        
+        oAuth2Client.setCredentials({
+          refresh_token: process.env.GOOGLE_REFRESH_TOKEN
+        });
+        
+        // Test the authentication
+        try {
+          const drive = google.drive({ version: 'v3', auth: oAuth2Client });
+          await drive.files.list({ pageSize: 1 });
+          
+          context = {
+            sheets: google.sheets({ version: 'v4', auth: oAuth2Client }),
+            drive: drive,
+            folderId: DRIVE_FOLDER_ID || undefined
+          };
+          console.error("Successfully authenticated with environment variables");
+          return;
+        } catch (testError) {
+          console.error("Environment variable token test failed:", testError);
+          // Continue to next auth method
+        }
+      } catch (error) {
+        console.error("Error with environment variable OAuth:", error);
+        // Continue to next auth method
+      }
+    }
     
     // Priority 3: Use OAuth credentials
-    if (fs.existsSync(CREDENTIALS_PATH)) {      
+    if (fs.existsSync(CREDENTIALS_PATH)) {
+      console.error("Creds already found!", CREDENTIALS_PATH);   
       try {
         const credentialContent = fs.readFileSync(CREDENTIALS_PATH, 'utf-8');
         const credentials = JSON.parse(credentialContent);
@@ -77,7 +110,7 @@ async function initContext(){
           client_secret, 
           redirect_uris[0]
         );
-        
+
         // Check if we have a saved token
         if (fs.existsSync(TOKEN_PATH)) {
           const tokenContent = fs.readFileSync(TOKEN_PATH, 'utf-8');
@@ -93,6 +126,7 @@ async function initContext(){
               drive: drive,
               folderId: DRIVE_FOLDER_ID || undefined
             };
+            console.error("Successfully found token");
             return;
           } catch (tokenError) {
             console.error("Saved token is invalid, generating new one:", tokenError);
@@ -103,9 +137,10 @@ async function initContext(){
         // If no token or token is invalid, get a new one
         const authUrl = oAuth2Client.generateAuthUrl({ 
           access_type: 'offline', 
-          scope: SCOPES 
+          scope: SCOPES,
+          prompt: 'consent' 
         });
-        
+ 
         console.log('Authorize this app by visiting this URL:', authUrl);
         
         const rl = readline.createInterface({ 
@@ -346,14 +381,15 @@ server.tool("copySheet", "Copies the contents of the source sheet to destination
 
 async function startServer() {
   try {
+    await initContext();
     const transport = new StdioServerTransport();
     await server.connect(transport);
-    await initContext();
-    
   } catch (error) {
     console.error("Failed to start server:", error);
     process.exit(1);
   }
 }
 
-startServer();
+console.error("Registering tools and starting server...");
+await startServer();
+console.error("✅ MCP Google Sheets server is running and listening for requests!");
