@@ -56,3 +56,29 @@ document.addEventListener('DOMContentLoaded', () => {
     reader.readAsText(file);
   });
 });
+
+const { ipcRenderer } = require('electron');
+
+document.getElementById('uploadForm').addEventListener('submit', function(event) {
+  event.preventDefault();
+
+  const fileInput = document.getElementById('credInput');
+  const file = fileInput.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+
+  reader.onload = function(e) {
+    try {
+      const json = JSON.parse(e.target.result);
+      ipcRenderer.send('credentials-uploaded', {
+        json,
+        filename: file.name
+      });
+    } catch (err) {
+      console.error('Invalid JSON:', err);
+    }
+  };
+
+  reader.readAsText(file);
+});
