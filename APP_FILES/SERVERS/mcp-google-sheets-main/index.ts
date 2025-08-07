@@ -1,6 +1,8 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod";
+import http from 'http';
+import url from 'url';
 
 import {google} from 'googleapis'
 import fs from 'fs'
@@ -9,6 +11,21 @@ import type { SpreadsheetContext } from "./types";
 import { addColumns, addRows, batchUpdate, copySheet, createSheet, createSpreadSheet, listSheets, listSpreadsheets, renameSheet, shareSpreadsheet, sheetData, spreadsheetInfo, updateCells } from './sheets';
 
 console.error("Starting Google Sheets MCP server...");
+
+//sound to confirm its working
+const platform = process.platform;
+
+if (platform === "darwin") {
+  Bun.spawn(["afplay", "positive.wav"]); //for macOS
+} else if (platform === "linux") {
+  Bun.spawn(["aplay", "positive.wav"]);  //for Linux
+} else if (platform === "win32") {
+  Bun.spawn([
+    "powershell",
+    "-c",
+    "(New-Object Media.SoundPlayer 'positive.wav').PlaySync();"
+  ]); //for Windows
+}
 
 const server = new McpServer({
   name: "Demo",
@@ -28,6 +45,53 @@ const CREDENTIALS_PATH = "credentials.json";
 const DRIVE_FOLDER_ID = process.env.DRIVE_FOLDER_ID || "";
 
 let context: SpreadsheetContext;
+
+async function authenticateAndSaveCredentials(oAuth2Client) {
+  return new Promise((resolve, reject) => {
+    const server = http.createServer(async (req, res) => {
+      const parsedUrl = url.parse(req.url || '', true);
+      if (parsedUrl.query.code) {
+        try {
+          const { tokens } = await oAuth2Client.getToken(parsedUrl.query.code);
+          oAuth2Client.setCredentials(tokens);
+
+          const envPath = './.env';
+          let envContent = fs.readFileSync(envPath, 'utf-8');
+          envContent = envContent.replace('{G1_REFRESH}', tokens.refresh_token || '');
+          fs.writeFileSync(envPath, envContent, 'utf-8');
+          console.log('✅ .env file updated with refresh token.');
+
+          res.writeHead(200, { 'Content-Type': 'text/html' });
+          res.end('<h1>Authentication successful! You can close this tab.</h1>');
+
+          server.close();
+          resolve(tokens);
+        } catch (err) {
+          console.error('❌ Token Error:', err);
+          res.writeHead(500, { 'Content-Type': 'text/html' });
+          res.end('<h1>Authentication failed.</h1>');
+          reject(err);
+        }
+      } else {
+        res.writeHead(404);
+        res.end('Not Found');
+      }
+    });
+
+    server.listen(80, () => {
+      const authUrl = oAuth2Client.generateAuthUrl({
+        access_type: 'offline',
+        scope: [
+          'https://www.googleapis.com/auth/spreadsheets',
+          'https://www.googleapis.com/auth/drive',
+          'https://www.googleapis.com/auth/drive.file'
+        ],
+        prompt: 'consent',
+      });
+      console.log('🌐 Authorize this app by visiting this URL:', authUrl);
+    });
+  });
+}
 
 async function initContext(){
   try {
@@ -135,28 +199,9 @@ async function initContext(){
         }
         
         // If no token or token is invalid, get a new one
-        const authUrl = oAuth2Client.generateAuthUrl({ 
-          access_type: 'offline', 
-          scope: SCOPES,
-          prompt: 'consent' 
-        });
- 
-        console.log('Authorize this app by visiting this [URL B]:', authUrl);
-        
-        const rl = readline.createInterface({
-          input: process.stdin, 
-          output: process.stdout 
-        });
-        
-        const code = await new Promise<string>(resolve => {
-          rl.question('Enter the code from that page here: ', (code) => {
-            rl.close();
-            resolve(code.trim());
-          });
-        });
+        const tokens = await authenticateAndSaveCredentials(oAuth2Client);
         
         try {
-          const { tokens } = await oAuth2Client.getToken(code);
           oAuth2Client.setCredentials(tokens);
           fs.writeFileSync(TOKEN_PATH, JSON.stringify(tokens, null, 2));
           console.log('Token stored to', TOKEN_PATH);

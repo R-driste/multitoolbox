@@ -47,13 +47,6 @@
             <p id="drive-link" class="link-placeholder" style="display: none;"></p>
 
             <button class="start-btn" data-target="drive-link" disabled>Start Token Grab</button>
-
-            <div class="code-input-container" style="margin-top: 1rem;">
-            <label for="drive-oauth-code-input">Paste Drive OAuth code here:</label><br />
-            <input type="text" id="drive-oauth-code-input" placeholder="Enter code from Google redirect URL" disabled />
-            <button id="drive-submit-code-btn" disabled>Submit Drive Code</button>
-            </div>
-
             <button class="section-submit" data-next="section3" disabled>Done with Drive</button>
         </section>
         </fieldset>
@@ -65,14 +58,9 @@
                 <img src="images/gsheet.png" alt="Google Sheets Code" height="30px" width="auto"/>
                 <span id="sheets-url" class="status waiting">⏳</span>
                 <p id="sheets-link" class="link-placeholder" style="display: none;"></p>
-                <div class="code-input-container">
-                    <label for="oauth-code-input">Paste OAuth code here to continue:</label><br />
-                    <input type="text" id="oauth-code-input" placeholder="Enter code from Google redirect URL" />
-                    <button class="start-btn" data-target="sheets-link" disabled>Start Token Grab</button>
-                    <button id="submit-code-btn" disabled>Submit Code</button>
-                </div>
-                <div id="code-submit-result" style="margin-top:1rem;"></div>
-                </section>
+                <button class="start-btn" data-target="sheets-link" disabled>Start Token Grab</button>
+                <button class="section-submit" data-next="section4" disabled>Done with Sheets</button>
+            </section>
         </fieldset>
     </div>
 
@@ -84,7 +72,7 @@
     const statusIcon = document.getElementById('link1-status');
     
     //redirect after the final submission!
-    submitBtn.addEventListener('click', () => {
+    submitBtn?.addEventListener('click', () => {
         window.location.href = 'config_6.html';
     });   
 
@@ -183,6 +171,7 @@
     checkFileContents(filePathToCheckDrive, statusSpanIdDrive, contentElementIdDrive);
     checkFileContents(filePathToCheckSheets, statusSpanIdSheets, contentElementIdSheets);
     }, 3000);
-</script>
+
+    </script>
 </body>
 </html>

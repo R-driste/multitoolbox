@@ -83,37 +83,58 @@ app.on('window-all-closed', () => {
 });
 
 // url update handling
-const { exec } = require('child_process');
+const { spawn } = require('child_process');
+
+let runningScript = null;
 
 ipcMain.handle('run-script', async (event, { scriptName }) => {
-  let cmd;
-  let cwd;
+  let cmd, args, cwd;
 
   switch (scriptName) {
-    case 'calendar':
-      cmd = 'node rungetcreds.js';
-      cwd = path.join(__dirname, 'SERVERS/google-calendar-mcp');
-      break;
-    case 'drive':
-      cmd = 'node dist/index.js';
-      cwd = path.join(__dirname, 'SERVERS/mcp-gdrive-main');
-      break;
     case 'sheets':
-      cmd = 'bun index.ts';
+      cmd = 'bun';
+      args = ['index.ts'];
       cwd = path.join(__dirname, 'SERVERS/mcp-google-sheets-main');
       break;
+    case 'drive':
+      cmd = 'node';
+      args = ['dist/index.js'];
+      cwd = path.join(__dirname, 'SERVERS/mcp-gdrive-main');
+      break;
+    case 'calendar':
+      cmd = 'node';
+      args = ['rungetcreds.js'];
+      cwd = path.join(__dirname, 'SERVERS/google-calendar-mcp');
+      break;
     default:
-      throw new Error('Unknown script name');
+      throw new Error('Unknown script');
   }
 
-  //use params to run correct script
-  return new Promise((resolve, reject) => {
-    exec(cmd, { cwd }, (error, stdout, stderr) => {
-      if (error) {
-        reject(stderr || error.message);
-      } else {
-        resolve(stdout);
-      }
-    });
+  const child = spawn(cmd, args, { cwd, stdio: ['pipe', 'pipe', 'pipe'] });
+
+  // Store globally to use stdin later
+  runningScript = child;
+
+  // Send output back to renderer
+  child.stdout.on('data', (data) => {
+    event.sender.send('script-output', data.toString());
   });
+
+  child.stderr.on('data', (data) => {
+    event.sender.send('script-error', data.toString());
+  });
+
+  child.on('close', (code) => {
+    event.sender.send('script-exit', `Process exited with code ${code}`);
+    runningScript = null;
+  });
+
+  return 'Script started';
+});
+
+// This handles input from the renderer textbox
+ipcMain.on('send-input', (event, input) => {
+  if (runningScript && !runningScript.killed) {
+    runningScript.stdin.write(input + '\n');
+  }
 });
