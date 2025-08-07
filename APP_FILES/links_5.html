@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Links and OAuth</title>
+    <link rel="stylesheet" href="styling.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bitter:ital,wght@0,100..900;1,100..900&family=Silkscreen&display=swap" rel="stylesheet">
+    <style>
+        button:disabled {
+            background-color: #ccc;
+            color: #666;
+            cursor: not-allowed;
+            opacity: 0.6;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="corner-number">5</div>
+    <div class="container">
+        <fieldset id="section1-wrapper">
+            <section id="section1">
+                <h2>PT 1: Google Calendar</h2>
+                <span id="calendar-url" class="status waiting">⏳</span>
+                <p id="calendar-link" class="link-placeholder" style="display: none;"></p>
+                <button class="start-btn" data-target="calendar-link">Start Token Grab</button>
+                <button class="section-submit" data-next="section2">Done with Calendar</button>
+            </section>
+        </fieldset>
+        <fieldset id="section2-wrapper" disabled>
+            <section id="section2">
+                <h2>PT 2: Google Drive</h2>
+                <span id="drive-url" class="status waiting">⏳</span>
+                <p id="drive-link" class="link-placeholder" style="display: none;"></p>
+                <button class="start-btn" data-target="drive-link" disabled>Start Token Grab</button>
+                <button class="section-submit" data-next="section3" disabled>Done with Drive</button>
+            </section>
+        </fieldset>
+        <fieldset id="section3-wrapper" disabled>
+            <section id="section3">
+                <h2>PT 3: Google Sheets</h2>
+                <span id="sheets-url" class="status waiting">⏳</span>
+                <p id="sheets-link" class="link-placeholder" style="display: none;"></p>
+                <div class="code-input-container">
+                    <label for="oauth-code-input">Paste OAuth code here to continue:</label><br />
+                    <input type="text" id="oauth-code-input" placeholder="Enter code from Google redirect URL" />
+                    <button class="start-btn" data-target="sheets-link" disabled>Start Token Grab</button>
+                    <button id="submit-code-btn" disabled>Submit Code</button>
+                </div>
+                <div id="code-submit-result" style="margin-top:1rem;"></div>
+                </section>
+        </fieldset>
+    </div>
+
+    <script>
+    //ai boilerplate, will replace later.
+    const submitBtn = document.getElementById('submit-code-btn');
+    const codeInput = document.getElementById('oauth-code-input');
+    const resultDiv = document.getElementById('code-submit-result');
+    const statusIcon = document.getElementById('link1-status');
+    
+    //redirect after the final submission!
+    submitBtn.addEventListener('click', () => {
+        window.location.href = 'config_6.html';
+    });   
+
+    document.querySelectorAll('.section-submit').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const nextId = btn.getAttribute('data-next');
+            const wrapper = document.getElementById(nextId + '-wrapper');
+            if (wrapper) {
+                wrapper.removeAttribute('disabled');
+                wrapper.querySelectorAll('button').forEach(button => {
+                    button.disabled = false;
+                });
+                wrapper.scrollIntoView({ behavior: 'smooth' });
+            } else {
+                console.warn(`No wrapper found with id ${nextId}-wrapper`);
+            }
+            btn.textContent = '✅ Completed';
+            btn.disabled = true;
+        });
+    });
+    </script>
+</body>
+</html>

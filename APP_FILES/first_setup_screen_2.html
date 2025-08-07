@@ -1,25 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="styling.css">
-</head>
-<body>  
-    <div class="container">
-        <h3>Hello! In order to use MCP you will first need to install claude</h3>
-        <p>Download Claude from this link:</p>
-        <p>https://claude.ai/download</p>
-        <img src="images/claudedownload.png" height="150px" width="auto">
+    <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>MCP Setup</title>
+    <link rel="stylesheet" href="styling.css"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bitter:ital,wght@0,100..900;1,100..900&family=Silkscreen&display=swap" rel="stylesheet">
+    </head>
+    <body>
+        <div id="corner-number">2</div>
+        <div class="container">
+            <h3>👋 First, in order to use MCP, you will first an LLM. You must install Claude and setup your Google project.</h3>
+            <p> Note: any links cannot be opened inside this application, you must open them in your browser. </p>
+            <div class="step">
+            <label class="checkbox-container">
+                <input type="checkbox">
+                <span class="checkmark"></span>
+                STEP 1: Download Claude from this link:
+            </label>
+            <p class="link-paragraph" id="claudeLink">https://claude.ai/download</p>
+            <img src="images/claudedownload.png" height="150px" width="auto"/>
+            </div>
+            <br/>
+            <div class="step">
+            <label class="checkbox-container">
+                <input type="checkbox">
+                <span class="checkmark"></span>
+                STEP 2: Create a Google project:
+            </label>
+            <p>You may title this project whatever you want.</p>
+            <p class="link-paragraph" id="gcpLink">https://console.cloud.google.com/projectcreate</p>
+            <img src="images/createproject.png" height="130px" width="auto"/>
+            </div>
 
-        <h3>Then you must create a Google project on your side.</h3>
-        <p>You may title this project whatever you want.
-            Here is the link to the project for your reference:</p>
-        <p>https://console.cloud.google.com/projectcreate</p>
-        <img src="images/createproject.png" height="150px" width="auto">
-        <button type='button' id='firstButton'>Done! Next Step.</button>
-    </div>
-    <script src="nav.js"></script>
+            <button type="button" id="firstButton">✅ Done! Next Step</button>
+        </div>
+
+        <script src="nav.js"></script>
     </body>
 </html>
