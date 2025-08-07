@@ -5,7 +5,14 @@ const path = require('path');
 const os = require('os');
 
 //get and distribute the credentials files
-ipcMain.on('credentials-uploaded', (event, { json, filename }) => {
+ipcMain.on('credentials-uploaded', (event, { json, filename, email, driveId }) => {
+  //email and folder
+  const envFilePath = path.join(__dirname, 'SERVERS/mcp-google-sheets-main/.env');
+  let envContent = fs.readFileSync(envFilePath, 'utf8');
+  envContent = envContent.replace(/\{EMAIL\}/g, email);
+  envContent = envContent.replace(/\{ID\}/g, driveId);
+  fs.writeFileSync(envFilePath, envContent, 'utf8');
+  
   //google calendar
   let destFolder1 = path.join(__dirname, 'SERVERS/google-calendar-mcp');
   if (!fs.existsSync(destFolder1)) {

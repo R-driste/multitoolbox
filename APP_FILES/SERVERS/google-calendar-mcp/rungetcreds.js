@@ -28,21 +28,21 @@ try {
   process.exit(1);
 }
 
-if (!config.installed?.client_id || !config.installed?.client_secret) {
+if (!config.web?.client_id || !config.web?.client_secret) {
   console.error('ERROR: client_id or client_secret missing in credentials.json');
   process.exit(1);
 }
 
 console.log('Loaded credentials:', {
-  client_id: config.installed.client_id,
+  client_id: config.web.client_id,
   client_secret: '***hidden***',
 });
 
 if (fs.existsSync(envPath)) {
   let envContent = fs.readFileSync(envPath, 'utf-8');
   envContent = envContent
-    .replace('{CLIENT_ID}', config.installed.client_id)
-    .replace('{CLIENT_SECRET}', config.installed.client_secret);
+    .replace('{CLIENT_ID}', config.web.client_id)
+    .replace('{CLIENT_SECRET}', config.web.client_secret);
   fs.writeFileSync(envPath, envContent, 'utf-8');
   console.log('✅ .env updated with client ID and secret.');
 } else {
@@ -51,8 +51,8 @@ if (fs.existsSync(envPath)) {
 
 const env = {
   ...process.env,
-  CLIENT_ID: config.installed.client_id,
-  CLIENT_SECRET: config.installed.client_secret,
+  CLIENT_ID: config.web.client_id,
+  CLIENT_SECRET: config.web.client_secret,
 };
 
 const child = spawn('node', ['getToken.js'], {

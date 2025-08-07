@@ -27,6 +27,7 @@
     <div id="corner-number">5</div>
     <div class="container">
         <h1>Oauth Setup, Second Section</h1>
+        <p>Go one at a time, close each website immediately after you are done.</p>
          <!--calendar-->
         <fieldset id="section1-wrapper">
             <section id="section1">
@@ -41,11 +42,8 @@
         <fieldset id="section2-wrapper" disabled>
         <section id="section2">
             <h4>PT 2: Google Drive</h4>
-            <p>The website should give you the code conveniently.</p>
-            <img src="images/gdrives.png" alt="Google Drive Code" height="30px" width="auto"/>
             <span id="drive-url" class="status waiting">⏳</span>
             <p id="drive-link" class="link-placeholder" style="display: none;"></p>
-
             <button class="start-btn" data-target="drive-link" disabled>Start Token Grab</button>
             <button class="section-submit" data-next="section3" disabled>Done with Drive</button>
         </section>
@@ -54,8 +52,6 @@
         <fieldset id="section3-wrapper" disabled>
             <section id="section3">
                 <h4>PT 3: Google Sheets</h4>
-                <p>When getting the code from the auth url from "code=..." select all the way up till &scope</p>
-                <img src="images/gsheet.png" alt="Google Sheets Code" height="30px" width="auto"/>
                 <span id="sheets-url" class="status waiting">⏳</span>
                 <p id="sheets-link" class="link-placeholder" style="display: none;"></p>
                 <button class="start-btn" data-target="sheets-link" disabled>Start Token Grab</button>
@@ -171,6 +167,15 @@
     checkFileContents(filePathToCheckDrive, statusSpanIdDrive, contentElementIdDrive);
     checkFileContents(filePathToCheckSheets, statusSpanIdSheets, contentElementIdSheets);
     }, 3000);
+
+    const lastSubmitBtn = document.querySelector('button.section-submit[data-next="section4"]');
+    if (lastSubmitBtn) {
+    lastSubmitBtn.addEventListener('click', () => {
+        setTimeout(() => {
+        window.location.href = 'config_6.html';
+        }, 500);
+    });
+    }
 
     </script>
 </body>

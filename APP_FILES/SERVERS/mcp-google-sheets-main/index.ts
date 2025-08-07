@@ -78,7 +78,7 @@ async function authenticateAndSaveCredentials(oAuth2Client) {
       }
     });
 
-    server.listen(80, () => {
+    server.listen(3000, () => {
       const authUrl = oAuth2Client.generateAuthUrl({
         access_type: 'offline',
         scope: [
@@ -88,7 +88,8 @@ async function authenticateAndSaveCredentials(oAuth2Client) {
         ],
         prompt: 'consent',
       });
-      console.log('🌐 Authorize this app by visiting this URL:', authUrl);
+      fs.writeFileSync('auth-url.txt', authUrl);
+      console.log('🌐 Authorize this app by visiting this [URL C]:', authUrl);
     });
   });
 }

@@ -71,10 +71,16 @@ document.getElementById('uploadForm').addEventListener('submit', function(event)
   reader.onload = function(e) {
     try {
       const json = JSON.parse(e.target.result);
+      const email = document.getElementById('emailInput').value;
+      const driveId = document.getElementById('driveIdInput').value;
+
       ipcRenderer.send('credentials-uploaded', {
         json,
-        filename: file.name
+        filename: file.name,
+        email,
+        driveId
       });
+
     } catch (err) {
       console.error('Invalid JSON:', err);
     }
