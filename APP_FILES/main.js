@@ -89,14 +89,14 @@ app.on('window-all-closed', () => {
   }
 });
 
-// url update handling
+//url update handling
 const { spawn } = require('child_process');
 
 let runningScript = null;
-
 ipcMain.handle('run-script', async (event, { scriptName }) => {
   let cmd, args, cwd;
 
+  //my different command cases
   switch (scriptName) {
     case 'sheets':
       cmd = 'bun';
@@ -118,24 +118,19 @@ ipcMain.handle('run-script', async (event, { scriptName }) => {
   }
 
   const child = spawn(cmd, args, { cwd, stdio: ['pipe', 'pipe', 'pipe'] });
-
-  // Store globally to use stdin later
   runningScript = child;
 
-  // Send output back to renderer
+  //send back to render
   child.stdout.on('data', (data) => {
     event.sender.send('script-output', data.toString());
   });
-
   child.stderr.on('data', (data) => {
     event.sender.send('script-error', data.toString());
   });
-
   child.on('close', (code) => {
     event.sender.send('script-exit', `Process exited with code ${code}`);
     runningScript = null;
   });
-
   return 'Script started';
 });
 
@@ -144,4 +139,19 @@ ipcMain.on('send-input', (event, input) => {
   if (runningScript && !runningScript.killed) {
     runningScript.stdin.write(input + '\n');
   }
+});
+
+//final config gen
+const { exec } = require('child_process');
+ipcMain.handle('generate-config', async () => {
+  return new Promise((resolve, reject) => {
+    exec('node generate_config.js', { cwd: __dirname }, (error, stdout, stderr) => {
+      if (error) {
+        console.error('Error running generate-config.js:', error);
+        return reject(error.message);
+      }
+      console.log('generate-config.js output:', stdout);
+      resolve('Config created successfully');
+    });
+  });
 });

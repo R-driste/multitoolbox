@@ -11,11 +11,29 @@
 </head>
 <body>
     <div class="container">
-    <h3>Final step! Claude Config</h3>
-    <p>STEP 1: Open Claude, navigate to developer settings, and open the config file.</p>
-    <p>STEP 2: Paste the generated config based on all your steps so far!</p>
-    <p>P.S. adjust localhost port if necessary.</p>
-    <pre id="config-template">Loading config...</pre>
+        <h3>Final Step! Claude Config</h3>
+        <p>STEP 1: Open Claude, navigate to developer settings, and open the config file.</p>
+        <p>STEP 2: Paste the generated config based on all your steps so far!</p>
+        <p>P.S. Adjust localhost port if necessary.</p>
+
+        <button id="generate-config">Generate & Download Config</button>
+        <div id="config-path"></div>
+
+        <pre id="config-template">Loading config...</pre>
     </div>
+    <script>
+        const { ipcRenderer } = require('electron');
+        document.getElementById('generate-config').addEventListener('click', async () => {
+            try {
+                const result = await ipcRenderer.invoke('generate-config');
+                document.getElementById('config-template').textContent = result;
+                const pathDisplay = document.getElementById('config-path');
+                pathDisplay.textContent = `DONE WITH EVERYTHING! Config generated successfully at final_config.json at ${__dirname}`;
+                pathDisplay.style.display = 'block';
+            } catch (err) {
+                alert("Error generating config: " + err);
+            }
+        });
+    </script>
 </body>
 </html>

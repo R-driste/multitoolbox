@@ -18,4 +18,7 @@ APP_FILES/SERVERS/google-calendar-mcp/credentials.json
 APP_FILES/SERVERS/mcp-gdrive-main/auth-url.txt
 finaltemplate.txt
 APP_FILES/SERVERS/mcp-google-sheets-main/auth-url.txt
-APP_FILES/SERVERS/mcp-google-sheets-main/envtemp
+APP_FILES/SERVERS/mcp-google-sheets-main/envtemp.txt
+APP_FILES/SERVERS/mcp-gdrive-main/envtemp.txt
+APP_FILES/SERVERS/google-calendar-mcp/envtemp.txt
+APP_FILES/final_config.json
