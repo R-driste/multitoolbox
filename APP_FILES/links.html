@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Links and OAuth</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+    section {
+      margin-bottom: 2rem;
+      border: 1px solid #ccc;
+      padding: 1rem;
+      border-radius: 6px;
+    }
+    h2 {
+      margin-top: 0;
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 0.5rem;
+    }
+    ul {
+      list-style: none;
+      padding-left: 0;
+    }
+    li {
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .status {
+      font-size: 1.2rem;
+      width: 20px;
+      text-align: center;
+    }
+    .waiting {
+      color: orange;
+      animation: blink 1.5s infinite;
+    }
+    @keyframes blink {
+      0%, 100% {opacity: 1;}
+      50% {opacity: 0.4;}
+    }
+    .code-input-container {
+      margin-top: 1rem;
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 0.4rem;
+      font-size: 1rem;
+      box-sizing: border-box;
+      margin-bottom: 0.5rem;
+    }
+    button {
+      padding: 0.5rem 1rem;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Section 1 -->
+  <section id="section1">
+    <h2>PT 1: Google Calendar</h2>
+    <ul>
+    <div id="update_drive">
+        <span class="status waiting">⏳</span>
+        <a href="https://example.com/link1b" target="_blank">Link 1B</a>
+  </section>
+
+  <!-- Section 2 -->
+  <section id="section2">
+    <h2>PT 2: Google Drive</h2>
+    <span class="status waiting">⏳</span>
+    <div id="update_drive">
+        <a href="https://example.com/link2a" target="_blank">Link 2A</a>
+    </div>
+  </section>
+
+  <!-- Google Sheets Section -->
+  <section id="google-sheets">
+    <h2>PT 3: Google Sheets</h2>
+    <ul>
+      <li>
+        <span class="status waiting" id="link1-status">⏳</span>
+        <a href="https://accounts.google.com/o/oauth2/auth?response_type=code&client_id=YOUR_CLIENT_ID&redirect_uri=http://localhost:8080&scope=https://www.googleapis.com/auth/spreadsheets https://www.googleapis.com/auth/drive&access_type=offline&prompt=consent" target="_blank" id="google-oauth-link">Authorize Google Sheets</a>
+      </li>
+      <li>
+        <span class="status waiting" id="link2-status">⏳</span>
+        <a href="https://example.com/gs-link2" target="_blank">Link GS 2</a>
+      </li>
+      <li>
+        <span class="status waiting" id="link3-status">⏳</span>
+        <a href="https://example.com/gs-link3" target="_blank">Link GS 3</a>
+      </li>
+    </ul>
+
+    <div class="code-input-container">
+      <label for="oauth-code-input">Paste OAuth code here to continue:</label><br />
+      <input type="text" id="oauth-code-input" placeholder="Enter code from Google redirect URL" />
+      <button id="submit-code-btn">Submit Code</button>
+    </div>
+
+    <div id="code-submit-result" style="margin-top:1rem;"></div>
+  </section>
+
+  <script>
+    //ai boilerplate, will replace later.
+    const submitBtn = document.getElementById('submit-code-btn');
+    const codeInput = document.getElementById('oauth-code-input');
+    const resultDiv = document.getElementById('code-submit-result');
+    const statusIcon = document.getElementById('link1-status');
+
+    submitBtn.addEventListener('click', () => {
+      const code = codeInput.value.trim();
+      if (!code) {
+        resultDiv.textContent = 'Please enter the OAuth code!';
+        return;
+      }
+      resultDiv.textContent = 'Submitting code...';
+
+      setTimeout(() => {
+        resultDiv.textContent = 'Code accepted! Google Sheets authorized.';
+        statusIcon.textContent = '✅';
+        statusIcon.classList.remove('waiting');
+      }, 1500);
+    });
+  </script>
+</body>
+</html>

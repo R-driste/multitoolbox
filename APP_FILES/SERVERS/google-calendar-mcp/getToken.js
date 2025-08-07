@@ -50,7 +50,7 @@ async function getRefreshToken() {
         prompt: 'consent'
       });
       fs.writeFileSync('auth-url.txt', authUrl); // for frontend or logging
-      console.log('🌐 Authorize this app by visiting this [URL]:', authUrl);
+      console.log('🌐 Authorize this app by visiting this [URL A]:', authUrl);
     });
   });
 }

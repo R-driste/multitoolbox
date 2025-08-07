@@ -141,9 +141,9 @@ async function initContext(){
           prompt: 'consent' 
         });
  
-        console.log('Authorize this app by visiting this URL:', authUrl);
+        console.log('Authorize this app by visiting this [URL B]:', authUrl);
         
-        const rl = readline.createInterface({ 
+        const rl = readline.createInterface({
           input: process.stdin, 
           output: process.stdout 
         });

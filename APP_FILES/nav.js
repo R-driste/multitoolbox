@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
       try {
         const json = JSON.parse(event.target.result);
         console.log("JSON content:", json);
-        window.location.href = "keyscreen_5.html";
+        window.location.href = "links.html";
       } catch (err) {
         alert("Invalid JSON file, upload proper credentials.");
       }

@@ -1,9 +1,7 @@
 # MCP-Google-Sheets
-
 A TypeScript Model Context Protocol (MCP) server that lets AI agents securely interact with Google Sheets via well-typed “tools.” Built on Bun and the `@modelcontextprotocol/sdk`, it supports both OAuth2 and Service-Account flows.
 
 ---
-
 ## 🚀 Features
 
 - **Authentication**  

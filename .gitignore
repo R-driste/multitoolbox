@@ -12,3 +12,6 @@ APP_FILES/SERVERS/mcp-gdrive-main/.env
 APP_FILES/SERVERS/mcp-google-sheets-main/.env
 APP_FILES/SERVERS/google-calendar-mcp/auth-url.txt
 APP_FILES/SERVERS/google-calendar-mcp/refresh_token.txt
+claude_config.json
+claude_config_old.txt
+APP_FILES/SERVERS/google-calendar-mcp/credentials.json
