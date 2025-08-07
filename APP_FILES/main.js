@@ -81,3 +81,39 @@ app.on('window-all-closed', () => {
     app.quit();
   }
 });
+
+// url update handling
+const { exec } = require('child_process');
+
+ipcMain.handle('run-script', async (event, { scriptName }) => {
+  let cmd;
+  let cwd;
+
+  switch (scriptName) {
+    case 'calendar':
+      cmd = 'node rungetcreds.js';
+      cwd = path.join(__dirname, 'SERVERS/google-calendar-mcp');
+      break;
+    case 'drive':
+      cmd = 'node dist/index.js';
+      cwd = path.join(__dirname, 'SERVERS/mcp-gdrive-main');
+      break;
+    case 'sheets':
+      cmd = 'bun index.ts';
+      cwd = path.join(__dirname, 'SERVERS/mcp-google-sheets-main');
+      break;
+    default:
+      throw new Error('Unknown script name');
+  }
+
+  //use params to run correct script
+  return new Promise((resolve, reject) => {
+    exec(cmd, { cwd }, (error, stdout, stderr) => {
+      if (error) {
+        reject(stderr || error.message);
+      } else {
+        resolve(stdout);
+      }
+    });
+  });
+});

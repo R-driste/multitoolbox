@@ -3,6 +3,13 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { spawn } from 'child_process';
 
+import playerFactory from 'play-sound';
+const player = playerFactory();
+
+player.play('positive.wav', function(err){
+  if (err) console.error('Error playing sound:', err);
+});
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 

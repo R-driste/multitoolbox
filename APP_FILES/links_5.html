@@ -16,12 +16,18 @@
             opacity: 0.6;
             pointer-events: none;
         }
+        .link-placeholder {
+            font-size: 8px;
+            word-break: break-all;
+            user-select: all;
+        }
     </style>
 </head>
 <body>
     <div id="corner-number">5</div>
     <div class="container">
         <h1>Oauth Setup, Second Section</h1>
+         <!--calendar-->
         <fieldset id="section1-wrapper">
             <section id="section1">
                 <h4>PT 1: Google Calendar</h4>
@@ -31,17 +37,27 @@
                 <button class="section-submit" data-next="section2">Done with Calendar</button>
             </section>
         </fieldset>
+        <!--drive-->
         <fieldset id="section2-wrapper" disabled>
-            <section id="section2">
-                <h4>PT 2: Google Drive</h4>
-                <p>The website should give you the code conveniently.</p>
-                <img src="images/gdrive.png" alt="Google Drive Code" height="150px" width="auto"/>
-                <span id="drive-url" class="status waiting">⏳</span>
-                <p id="drive-link" class="link-placeholder" style="display: none;"></p>
-                <button class="start-btn" data-target="drive-link" disabled>Start Token Grab</button>
-                <button class="section-submit" data-next="section3" disabled>Done with Drive</button>
-            </section>
+        <section id="section2">
+            <h4>PT 2: Google Drive</h4>
+            <p>The website should give you the code conveniently.</p>
+            <img src="images/gdrives.png" alt="Google Drive Code" height="30px" width="auto"/>
+            <span id="drive-url" class="status waiting">⏳</span>
+            <p id="drive-link" class="link-placeholder" style="display: none;"></p>
+
+            <button class="start-btn" data-target="drive-link" disabled>Start Token Grab</button>
+
+            <div class="code-input-container" style="margin-top: 1rem;">
+            <label for="drive-oauth-code-input">Paste Drive OAuth code here:</label><br />
+            <input type="text" id="drive-oauth-code-input" placeholder="Enter code from Google redirect URL" disabled />
+            <button id="drive-submit-code-btn" disabled>Submit Drive Code</button>
+            </div>
+
+            <button class="section-submit" data-next="section3" disabled>Done with Drive</button>
+        </section>
         </fieldset>
+         <!--sheets-->
         <fieldset id="section3-wrapper" disabled>
             <section id="section3">
                 <h4>PT 3: Google Sheets</h4>
@@ -89,6 +105,84 @@
             btn.disabled = true;
         });
     });
-    </script>
+
+    const { ipcRenderer } = require('electron');
+    //run links scripts
+    document.querySelectorAll('.start-btn').forEach(button => {
+    button.addEventListener('click', async () => {
+        const target = button.getAttribute('data-target');
+        let scriptName = null;
+
+        if (target === 'calendar-link') scriptName = 'calendar';
+        else if (target === 'drive-link') scriptName = 'drive';
+        else if (target === 'sheets-link') scriptName = 'sheets';
+
+        if (!scriptName) {
+            console.warn('Unknown script for target:', target);
+            return;
+        }
+
+        try {
+        const output = await ipcRenderer.invoke('run-script', { scriptName });
+        console.log(`Output from ${scriptName} script:`, output);
+        alert(`Script "${scriptName}" finished. Check console for output.`);
+        const linkElem = document.getElementById(target);
+        if (linkElem) {
+            linkElem.textContent = output;
+            linkElem.style.display = 'block';
+        }
+        } catch (err) {
+        console.error(`Error running ${scriptName}:`, err);
+        alert(`Script "${scriptName}" failed: ${err}`);
+        }
+    });
+    });
+
+    //periodically update the urls
+    const fs = require('fs');
+    const path = require('path');
+    function checkFileContents(filePath, statusSpanId, contentElementId) {
+    const statusSpan = document.getElementById(statusSpanId);
+    const contentElem = document.getElementById(contentElementId);
+    if (!statusSpan) return;
+
+    fs.readFile(filePath, 'utf8', (err, data) => {
+        if (err || data.trim().length === 0) {
+            statusSpan.textContent = '⌛ Waiting for URL';
+            statusSpan.className = 'status waiting';
+            if (contentElem) {
+                contentElem.style.display = 'none';
+                contentElem.textContent = '';
+            }
+            return;
+        } else {
+        statusSpan.textContent = '✅ Link Retrieved, Please Copy Paste to Your Browser';
+        statusSpan.className = 'status done';
+        if (contentElem) {
+            contentElem.style.display = 'block';
+            contentElem.textContent = data;
+        }
+        }
+    });
+    }
+
+    const filePathToCheckCal = path.join(__dirname, 'SERVERS/google-calendar-mcp/auth-url.txt');
+    const statusSpanIdCal = 'calendar-url';
+    const contentElementIdCal = 'calendar-link';
+
+    const filePathToCheckDrive = path.join(__dirname, 'SERVERS/mcp-gdrive-main/auth-url.txt');
+    const statusSpanIdDrive = 'drive-url';
+    const contentElementIdDrive = 'drive-link';
+
+    const filePathToCheckSheets = path.join(__dirname, 'SERVERS/mcp-google-sheets-main/auth-url.txt');
+    const statusSpanIdSheets = 'sheets-url';
+    const contentElementIdSheets = 'sheets-link';
+
+    setInterval(() => {
+    checkFileContents(filePathToCheckCal, statusSpanIdCal, contentElementIdCal);
+    checkFileContents(filePathToCheckDrive, statusSpanIdDrive, contentElementIdDrive);
+    checkFileContents(filePathToCheckSheets, statusSpanIdSheets, contentElementIdSheets);
+    }, 3000);
+</script>
 </body>
 </html>
