@@ -21,9 +21,11 @@ const scopes = [
 ];
 
 const saveToken = (token) => {
-  const savePath = path.join(__dirname, 'refresh_token.txt');
-  fs.writeFileSync(savePath, token, 'utf-8');
-  console.log(`✅ Refresh token saved to ${savePath}`);
+  const envPath = path.join(__dirname, '.env');
+  let envContent = fs.readFileSync(envPath, 'utf-8');
+  envContent = envContent.replace('{G1_REFRESH}', token);
+  fs.writeFileSync(envPath, envContent, 'utf-8');
+  console.log('✅ .env file updated with refresh token.');
 };
 
 async function getRefreshToken() {

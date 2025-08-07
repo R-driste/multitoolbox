@@ -21,9 +21,10 @@
 <body>
     <div id="corner-number">5</div>
     <div class="container">
+        <h1>Oauth Setup, Second Section</h1>
         <fieldset id="section1-wrapper">
             <section id="section1">
-                <h2>PT 1: Google Calendar</h2>
+                <h4>PT 1: Google Calendar</h4>
                 <span id="calendar-url" class="status waiting">⏳</span>
                 <p id="calendar-link" class="link-placeholder" style="display: none;"></p>
                 <button class="start-btn" data-target="calendar-link">Start Token Grab</button>
@@ -32,7 +33,9 @@
         </fieldset>
         <fieldset id="section2-wrapper" disabled>
             <section id="section2">
-                <h2>PT 2: Google Drive</h2>
+                <h4>PT 2: Google Drive</h4>
+                <p>The website should give you the code conveniently.</p>
+                <img src="images/gdrive.png" alt="Google Drive Code" height="150px" width="auto"/>
                 <span id="drive-url" class="status waiting">⏳</span>
                 <p id="drive-link" class="link-placeholder" style="display: none;"></p>
                 <button class="start-btn" data-target="drive-link" disabled>Start Token Grab</button>
@@ -41,7 +44,9 @@
         </fieldset>
         <fieldset id="section3-wrapper" disabled>
             <section id="section3">
-                <h2>PT 3: Google Sheets</h2>
+                <h4>PT 3: Google Sheets</h4>
+                <p>When getting the code from the auth url from "code=..." select all the way up till &scope</p>
+                <img src="images/gsheet.png" alt="Google Sheets Code" height="30px" width="auto"/>
                 <span id="sheets-url" class="status waiting">⏳</span>
                 <p id="sheets-link" class="link-placeholder" style="display: none;"></p>
                 <div class="code-input-container">

@@ -37,7 +37,7 @@ ipcMain.on('credentials-uploaded', (event, { json, filename }) => {
   if (!fs.existsSync(destFolder3)) {
     fs.mkdirSync(destFolder3, { recursive: true });
   }
-  const destPath3 = path.join(destFolder3, "gcp-oauth-keys.json");
+  const destPath3 = path.join(destFolder3, "gcp-oauth.keys.json");
   fs.writeFile(destPath3, JSON.stringify(json, null, 2), (err) => {
     if (err) {
       console.error('Error writing file to Drive MCP:', err);

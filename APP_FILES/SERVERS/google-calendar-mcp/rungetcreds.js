@@ -7,7 +7,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const configPath = path.join(__dirname, 'credentials.json');
-
+const envPath = path.join(__dirname, '.env');
 if (!fs.existsSync(configPath)) {
   console.error('ERROR: credentials.json not found at:', configPath);
   process.exit(1);
@@ -30,6 +30,17 @@ console.log('Loaded credentials:', {
   client_id: config.installed.client_id,
   client_secret: '***hidden***',
 });
+
+if (fs.existsSync(envPath)) {
+  let envContent = fs.readFileSync(envPath, 'utf-8');
+  envContent = envContent
+    .replace('{CLIENT_ID}', config.installed.client_id)
+    .replace('{CLIENT_SECRET}', config.installed.client_secret);
+  fs.writeFileSync(envPath, envContent, 'utf-8');
+  console.log('✅ .env updated with client ID and secret.');
+} else {
+  console.warn('⚠️ .env file not found at:', envPath);
+}
 
 const env = {
   ...process.env,
