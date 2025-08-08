@@ -7,9 +7,6 @@ off_lims/
 google-calendar-mcp/.env
 zips/
 APP_FILES/SERVERS/mcp-gdrive-main/AUTH/
-APP_FILES/SERVERS/google-calendar-mcp/.env
-APP_FILES/SERVERS/mcp-gdrive-main/.env
-APP_FILES/SERVERS/mcp-google-sheets-main/.env
 APP_FILES/SERVERS/google-calendar-mcp/auth-url.txt
 APP_FILES/SERVERS/google-calendar-mcp/refresh_token.txt
 claude_config.json
@@ -22,3 +19,6 @@ APP_FILES/SERVERS/mcp-google-sheets-main/envtemp.txt
 APP_FILES/SERVERS/mcp-gdrive-main/envtemp.txt
 APP_FILES/SERVERS/google-calendar-mcp/envtemp.txt
 APP_FILES/final_config.json
+google-calendar-mcp/
+mcp-gdrive-main/
+mcp-google-sheets-main/
